@@ -55,7 +55,8 @@ class Converter():
                 if (self.outFilePath):
                     self.jsonFilePath = self.outFilePath
                 else:
-                    self.inFileDir / "{0}.json".format(self.inFileName)
+                    self.jsonFilePath = self.inFileDir / "{0}.json".format(
+                        self.inFileName)
                     print("由于未手动指定输出文件路径，自动指定：输出文件路径为{0}".format(
                         self.jsonFilePath))
 
@@ -70,7 +71,8 @@ class Converter():
                 if (self.outFilePath):
                     self.txtFilePath = self.outFilePath
                 else:
-                    self.inFileDir / "{0}.TXT".format(self.inFileName)
+                    self.txtFilePath = self.inFileDir / "{0}.TXT".format(
+                        self.inFileName)
                     print("由于未手动指定输出文件路径，自动指定：输出文件路径为{0}".format(
                         self.txtFilePath))
 
