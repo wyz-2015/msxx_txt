@@ -21,18 +21,6 @@ BlockSet = {
 }
 
 
-def get_file_len(file) -> int:
-    """
-    获取传入文件的总长
-    """
-    posBackup = file.tell()
-    file.seek(0, 2)
-    _len = file.tell()
-    file.seek(posBackup, 0)
-
-    return _len
-
-
 class Converter():
     def __init__(self, inFilePath: Path, mode: str, outFilePath: Path = None):
         self.data = []
@@ -96,7 +84,8 @@ class Converter():
         """
         读TXT文件，构建各Block、BlockSet
         """
-        txtFileLen = get_file_len(self.txtFile)
+        # txtFileLen = get_file_len(self.txtFile)
+        txtFileLen = self.txtFilePath.stat().st_size
         while (self.txtFile.tell() < txtFileLen):
             blockCount = int(np.fromfile(
                 self.txtFile, dtype=np.uint32, count=1)[0])
@@ -154,7 +143,11 @@ class Converter():
 
     def write_txt(self):
         for _blockSet in self.data:
-            blockCount = np.uint32(_blockSet["blockCount"])
+            (bc_real, bc) = (len(_blockSet["blockList"]), _blockSet["blockCount"]) 
+            if (bc_real != bc):
+                print("记载包含{0:n}组块(Block)，实际包含{1:n}组块。程序将以实际计得的块数为准".format(
+                    bc, bc_real))
+            blockCount = np.uint32(bc_real)
             blockCount.tofile(self.txtFile)
 
             for _block in _blockSet["blockList"]:
